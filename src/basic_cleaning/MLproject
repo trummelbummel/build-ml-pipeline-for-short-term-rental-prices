@@ -6,27 +6,27 @@ entry_points:
     parameters:
 
       input_artifact:
-        description: ## ADD DESCRIPTION
+        description: 'Raw dataset.'
         type: string
 
       output_artifact:
-        description: ## ADD DESCRIPTION
+        description: 'Preprocessed dataset.'
         type: string
 
       output_type:
-        description: ## ADD DESCRIPTION
+        description: 'clean data'
         type: string
 
       output_description:
-        description: ## ADD DESCRIPTION
+        description: 'Preprocessed data with correlated columns removed, outliers removed, missing values imputed.'
         type: string
 
       min_price:
-        description: ## ADD DESCRIPTION
+        description: 'Minimum value not to be considered as outlier.'
         type: string
 
       max_price:
-        description: ## ADD DESCRIPTION
+        description: 'Maximum value not to be considered as outlier.'
         type: string
 
 

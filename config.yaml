@@ -6,7 +6,11 @@ main:
   experiment_name: development
   steps: all
 etl:
-  sample: "sample1.csv"
+  sample: "sample1.csv:latest"
+  input_artifact: "sample1.csv:latest"
+  output_artifact: "clean_sample.csv:latest"
+  output_type: "clean_sample"
+  output_description: "Preprocessed data with correlated columns removed, outliers removed, missing values imputed."
   min_price: 10 # dollars
   max_price: 350 # dollars
 data_check:
