@@ -48,13 +48,12 @@ def go(config: DictConfig):
                 },
             )
         if "basic_cleaning" in active_steps:
-            print(config)
             _ = mlflow.run(
                 os.path.join(hydra.utils.get_original_cwd(), "src", "basic_cleaning"),
                 "main",
                 parameters={
                     "input_artifact": config["etl"]["sample"],
-                    "output_artifact": config["etl"]["sample"],
+                    "output_artifact": config["etl"]["output_artifact"],
                     "output_type": config["etl"]["output_type"],
                     "output_description": config["etl"]["output_description"],
                     "min_price": config['etl']['min_price'],
@@ -63,16 +62,27 @@ def go(config: DictConfig):
             )
 
         if "data_check" in active_steps:
-            ##################
-            # Implement here #
-            ##################
-            pass
+            _ = mlflow.run(
+                os.path.join(hydra.utils.get_original_cwd(), "src", "data_check"),
+                "main",
+                parameters={
+                    "csv": config["test"]["csv"],
+                    "ref": config["test"]["ref"],
+                    "min_price": config["test"]["min_price"],
+                    "max_price": config["test"]["max_price"],
+                    "kl_threshold": config["test"]["kl_threshold"]
+                },
+            )
 
         if "data_split" in active_steps:
-            ##################
-            # Implement here #
-            ##################
-            pass
+            _ = mlflow.run(f"{config['main']['components_repository']}/train_val_test_split",
+                           parameters={
+                               "input": config["modeling"]["input"],
+                               "test_size": config["modeling"]["test_size"],
+                               "val_size": config["modeling"]["val_size"],
+                               "stratify_by": config["modeling"]["stratify_by"],
+                           },
+                           )
 
         if "train_random_forest" in active_steps:
 

@@ -35,14 +35,31 @@ def go(args):
     df = df[idx].copy()
     df['last_review'] = pd.to_datetime(df['last_review'])
     df.availability_365.fillna(df.availability_365.median(), inplace=True)
-    keepcols = set(df.columns).difference(set(['host_id', 'reviews_per_month',
-                                               'latitude', 'longitude',
-                                               'minimum_nights']))
+    keepcols = [
+        "id",
+        "name",
+        "host_id",
+        "host_name",
+        "neighbourhood_group",
+        "neighbourhood",
+        "latitude",
+        "longitude",
+        "room_type",
+        "price",
+        "minimum_nights",
+        "number_of_reviews",
+        "last_review",
+        "reviews_per_month",
+        "calculated_host_listings_count",
+        "availability_365",
+    ]
+
     df_new = df[keepcols]
     logging.info('Preprocessing SUCCESS.')
     logging.info(f'Keeping columns {keepcols}')
 
     logging.info('Uploading preprocessed dataset.')
+
 
     df_new.to_csv(args.output_artifact, index=False)
     artifact = wandb.Artifact(
@@ -54,6 +71,7 @@ def go(args):
     run.log_artifact(artifact)
 
     logging.info('Uploading SUCCESS.')
+    run.finish()
 
 
 if __name__ == "__main__":
@@ -63,7 +81,7 @@ if __name__ == "__main__":
         type=str,
         help='Path for input artifact download.',
         required=True,
-        default="sample.csv"
+        default="sample"
     )
 
     parser.add_argument(
@@ -71,7 +89,7 @@ if __name__ == "__main__":
         type=str,
         help='Path to output artifact location.',
         required=True,
-        default="clean_sample.csv"
+        default="clean_sample"
     )
 
     parser.add_argument(
