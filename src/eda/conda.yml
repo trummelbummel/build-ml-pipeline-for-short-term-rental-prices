@@ -8,8 +8,8 @@ dependencies:
   - ipykernel
   - jinja2==3.1.1
   - pandas=1.2.3
-  - pip=20.3.3
+  - pip=23.0.1
   - pandas-profiling==3.1.0
   - pyarrow=2.0
   - ipywidgets
-  - wandb==0.10.31
+  - wandb==0.14.0
