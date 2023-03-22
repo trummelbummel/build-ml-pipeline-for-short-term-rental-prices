@@ -3,4 +3,4 @@ conda_env: conda.yml
 
 entry_points:
   main:
-    command: jupyter notebook
+    command: "python -m ipykernel install --user --name=eda ; jupyter notebook"
