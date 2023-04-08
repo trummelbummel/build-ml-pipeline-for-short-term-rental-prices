@@ -17,6 +17,10 @@ data_check:
   csv: "clean_sample.csv:latest"
   ref: "clean_sample.csv:reference"
   kl_threshold: 0.2
+test_model:
+  mlflow_model: "random_forest_export:prod"
+  test_dataset: "test_data.csv:latest"
+
 modeling:
   trainval_artifact: "trainval_data.csv:latest"
   output_artifact: "random_forest_export"
