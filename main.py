@@ -42,7 +42,7 @@ def go(config: DictConfig):
                 version='main',
                 parameters={
                     "sample": config["etl"]["sample"],
-                    "artifact_name": "sample.csv",
+                    "artifact_name": "sample1.csv",
                     "artifact_type": "raw_data",
                     "artifact_description": "Raw file as downloaded"
                 },
@@ -52,7 +52,7 @@ def go(config: DictConfig):
                 os.path.join(hydra.utils.get_original_cwd(), "src", "basic_cleaning"),
                 "main",
                 parameters={
-                    "input_artifact": config["etl"]["sample"],
+                    "input_artifact": config["etl"]["sample"] + ':latest',
                     "output_artifact": config["etl"]["output_artifact"],
                     "output_type": config["etl"]["output_type"],
                     "output_description": config["etl"]["output_description"],
@@ -66,11 +66,11 @@ def go(config: DictConfig):
                 os.path.join(hydra.utils.get_original_cwd(), "src", "data_check"),
                 "main",
                 parameters={
-                    "csv": config["test"]["csv"],
-                    "ref": config["test"]["ref"],
-                    "min_price": config["test"]["min_price"],
-                    "max_price": config["test"]["max_price"],
-                    "kl_threshold": config["test"]["kl_threshold"]
+                    "csv": config["data_check"]["csv"],
+                    "ref": config["data_check"]["ref"],
+                    "min_price": config["etl"]["min_price"],
+                    "max_price": config["etl"]["max_price"],
+                    "kl_threshold": config["data_check"]["kl_threshold"]
                 },
             )
 
@@ -79,10 +79,10 @@ def go(config: DictConfig):
                            parameters={
                                "input": config["modeling"]["input"],
                                "test_size": config["modeling"]["test_size"],
-                               "val_size": config["modeling"]["val_size"],
                                "stratify_by": config["modeling"]["stratify_by"],
                            },
                            )
+
 
         if "train_random_forest" in active_steps:
 
@@ -93,12 +93,19 @@ def go(config: DictConfig):
 
             # NOTE: use the rf_config we just created as the rf_config parameter for the train_random_forest
             # step
+            _ = mlflow.run(os.path.join(hydra.utils.get_original_cwd(), "src", "train_random_forest"),
+                           parameters={
+                               "trainval_artifact": config["modeling"]["trainval_artifact"],
+                               "random_seed": config["modeling"]["random_seed"],
+                               "val_size": config["modeling"]["val_size"],
+                               "rf_config": rf_config,
+                               "max_tfidf_features" : config["modeling"]["max_tfidf_features"],
+                               "stratify_by": config["modeling"]["stratify_by"],
+                               "output_artifact": config["modeling"]["output_artifact"],
+                           },
+                           )
 
-            ##################
-            # Implement here #
-            ##################
 
-            pass
 
         if "test_regression_model" in active_steps:
 

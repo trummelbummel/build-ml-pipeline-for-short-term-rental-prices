@@ -6,18 +6,20 @@ main:
   experiment_name: development
   steps: all
 etl:
-  sample: "sample.csv:latest"
+  sample: "sample1.csv"
   input_artifact: "sample"
-  output_artifact: "clean_sample"
+  output_artifact: "clean_sample.csv"
   output_type: "clean_sample"
   output_description: "Preprocessed data with correlated columns removed, outliers removed, missing values imputed."
   min_price: 10 # dollars
   max_price: 350 # dollars
 data_check:
+  csv: "clean_sample.csv:latest"
+  ref: "clean_sample.csv:reference"
   kl_threshold: 0.2
-  csv: True
-  ref: True
 modeling:
+  trainval_artifact: "trainval_data.csv:latest"
+  output_artifact: "random_forest_export"
   # Fraction of data to use for test (the remaining will be used for train and validation)
   test_size: 0.2
   # Fraction of remaining data to use for validation
