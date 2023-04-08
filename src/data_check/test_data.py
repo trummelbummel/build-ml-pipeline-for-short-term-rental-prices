@@ -60,6 +60,14 @@ def test_similar_neigh_distrib(data: pd.DataFrame, ref_data: pd.DataFrame, kl_th
     assert scipy.stats.entropy(dist1, dist2, base=2) < kl_threshold
 
 
-########################################################
-# Implement here test_row_count and test_price_range   #
-########################################################
+def test_row_count(data: pd.DataFrame, ref_data: pd.DataFrame):
+    """
+    Test if the row count of reference data and data used in the project is the same.
+    """
+    assert data.shape[0] == ref_data.shape[0]
+
+def test_price_range(data: pd.DataFrame, max_price: float, min_price: float):
+    """
+    Test if the preprocessed data price range is correctly applied.
+    """
+    assert data['price'].between(min_price, max_price).all() == True
