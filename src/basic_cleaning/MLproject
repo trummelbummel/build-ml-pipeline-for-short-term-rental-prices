@@ -23,11 +23,11 @@ entry_points:
 
       min_price:
         description: 'Minimum value not to be considered as outlier.'
-        type: string
+        type: float
 
       max_price:
         description: 'Maximum value not to be considered as outlier.'
-        type: string
+        type: float
 
 
     command: >-
